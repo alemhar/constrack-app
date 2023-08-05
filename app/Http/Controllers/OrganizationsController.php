@@ -6,7 +6,9 @@ use App\Models\Organization;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Request;
+
 use Inertia\Inertia;
+use Illuminate\Http\Request as HttpRequest;
 
 class OrganizationsController extends Controller
 {
@@ -54,39 +56,37 @@ class OrganizationsController extends Controller
 
     public function edit(Organization $organization)
     {
-        return Inertia::render('Organizations/Edit', [
-            'organization' => [
-                'id' => $organization->id,
-                'name' => $organization->name,
-                'email' => $organization->email,
-                'phone' => $organization->phone,
-                'address' => $organization->address,
-                'city' => $organization->city,
-                'region' => $organization->region,
-                'country' => $organization->country,
-                'postal_code' => $organization->postal_code,
-                'deleted_at' => $organization->deleted_at,
-                'contacts' => $organization->contacts()->orderByName()->get()->map->only('id', 'name', 'city', 'phone'),
-            ],
+        return Inertia::render('Organizations/Edit');
+        
+        // return Inertia::render('Organizations/Edit', [
+        //     'organization' => [
+        //         'id' => $organization->id,
+        //         'name' => $organization->name,
+        //         'email' => $organization->email,
+        //         'phone' => $organization->phone,
+        //         'address' => $organization->address,
+        //         'city' => $organization->city,
+        //         'region' => $organization->region,
+        //         'country' => $organization->country,
+        //         'postal_code' => $organization->postal_code,
+        //         'deleted_at' => $organization->deleted_at,
+        //         'contacts' => $organization->contacts()->orderByName()->get()->map->only('id', 'name', 'city', 'phone'),
+        //     ],
+        // ]);
+    }
+
+    public function add($id)
+    {
+        return Inertia::render('Organizations/Add', [
+            'id' => $id
         ]);
     }
 
-    public function update(Organization $organization)
+    public function update($id, HttpRequest $request)
     {
-        $organization->update(
-            Request::validate([
-                'name' => ['required', 'max:100'],
-                'email' => ['nullable', 'max:50', 'email'],
-                'phone' => ['nullable', 'max:50'],
-                'address' => ['nullable', 'max:150'],
-                'city' => ['nullable', 'max:50'],
-                'region' => ['nullable', 'max:50'],
-                'country' => ['nullable', 'max:2'],
-                'postal_code' => ['nullable', 'max:25'],
-            ])
-        );
-
-        return Redirect::back()->with('success', 'Organization updated.');
+        
+        return Inertia::render('Organizations/Edit', ['id' => $id, 'qty' => $request->qty]);
+        // return Redirect::back()->with('success', 'Organization updated.');
     }
 
     public function destroy(Organization $organization)

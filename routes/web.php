@@ -87,7 +87,11 @@ Route::get('organizations/{organization}/edit', [OrganizationsController::class,
     ->name('organizations.edit')
     ->middleware('auth');
 
-Route::put('organizations/{organization}', [OrganizationsController::class, 'update'])
+Route::get('organizations/{id}/add', [OrganizationsController::class, 'add'])
+    ->name('organizations.add')
+    ->middleware('auth');
+
+Route::put('organizations/{id}', [OrganizationsController::class, 'update'])
     ->name('organizations.update')
     ->middleware('auth');
 
